@@ -1,5 +1,5 @@
 export interface SiteParser {
-    getSites(take?: number, after?: Date): ParsedSite[];
+    getSites(take?: number, after?: Date): Promise<ParsedSite[]>;
 }
 
 export interface ParsedSite {
