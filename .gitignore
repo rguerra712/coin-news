@@ -68,3 +68,5 @@ lib/*.map
 lib/ts.js
 /**/*.js
 /out
+
+# Node filespackage-lock.json
