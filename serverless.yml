@@ -1,28 +1,27 @@
 service: aws-typescript-tests
 
 stage: prod
-region: us-west-2
+region: us-east-1
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
 
 package:
-  exclude:
-    - node_modules/**/*
   include:
     handler.ts
 
 functions:
-  trade:
-    handler: handler.hello
+  coin-news:
+    handler: handler.news
+    timeout: 30
 
     events:
       - http:
-          path: hello
-          method: post
+          path: coin-news
+          method: get
 
