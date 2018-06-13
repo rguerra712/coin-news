@@ -12,7 +12,8 @@
             "preLaunchTask": "npm: build",
             "outFiles": [
 				"${workspaceRoot}/out/**/*.js"
-			]
+            ],
+            "envFile": "${workspaceFolder}/.env"
         },
         {
             "type": "node",
