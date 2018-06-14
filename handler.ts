@@ -9,7 +9,7 @@ export const news: Handler = (
     context: Context,
     cb: Callback
 ) => {
-    let sites = getSites()
+    let sites = getSites(event)
         .then(sites => {
             const response = {
                 statusCode: 200,
@@ -20,7 +20,7 @@ export const news: Handler = (
         .catch(onerror);
 };
 
-function getSites(): Promise<ParsedSite[]> {
+function getSites(event: APIGatewayEvent): Promise<ParsedSite[]> {
     let parserProvider = new ParserProvider();
     let parsers = parserProvider.getAllParsers();
     let parserPromises = parsers.map(parser => parser.getSites());
