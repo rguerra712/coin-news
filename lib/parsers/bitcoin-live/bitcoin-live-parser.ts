@@ -21,7 +21,7 @@ export default class BitcoinLiveParser implements SiteParser {
                     sitesPromise
                         .then(sites => {
                             if (after) {
-                                sites = sites.filter(site => site.date);
+                                sites = sites.filter(site => site.date && site.date > after);
                             }
                             resolve(sites);
                         })
@@ -54,6 +54,7 @@ let getSitesFromArticle = (url: string): Promise<ParsedSite> => {
 let parseArticle = (html: string): ParsedSite => {
     const $ = cheerio.load(html, { xmlMode: false });
     let site = new ParsedSite();
+    site.title = $('title').text();
     site.description = $('meta[property*="description"]').attr("content");
     let swatch = $('img[src*="swatch"]').attr("src");
     if (swatch) {
@@ -62,7 +63,7 @@ let parseArticle = (html: string): ParsedSite => {
     }
     let dateString = $(".published_at").text();
     if (dateString) {
-        dateString += " EST";
+        dateString += " CST";
         site.date = new Date(Date.parse(dateString));
     }
     return site;

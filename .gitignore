@@ -60,6 +60,7 @@ typings/
 # dotenv environment variables file
 .env
 dev.env
+.env.*
 
 # Exclude tsc generated files
 js/*.map
@@ -70,3 +71,6 @@ lib/ts.js
 /out
 
 # Node filespackage-lock.json
+
+# build files
+.build/

@@ -1,7 +1,6 @@
 import { ParsedSite } from "./../types/types";
 
-export default function isNewsNew(sites: ParsedSite[], minutesThatDetermineIfNew: number = 15): boolean {
-    let newMinutesAgo = new Date( Date.now() - 1000 * 60 * minutesThatDetermineIfNew );
+export default function isNewsNew(sites: ParsedSite[], minutesThatDetermineIfNew: number = 60): boolean {
     return sites
         .filter(site => site && site.date)
         .some(site => {

@@ -1,4 +1,3 @@
-import { Sender, Message } from 'node-gcm';
 import request from 'axios';
 
 export default class WebhookNotifier {

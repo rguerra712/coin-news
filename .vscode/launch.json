@@ -13,7 +13,7 @@
             "outFiles": [
 				"${workspaceRoot}/out/**/*.js"
             ],
-            "envFile": "${workspaceFolder}/.env"
+            "envFile": "${workspaceFolder}/.env.dev"
         },
         {
             "type": "node",
