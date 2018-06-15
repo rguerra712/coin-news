@@ -54,7 +54,7 @@ let getSitesFromArticle = (url: string): Promise<ParsedSite> => {
 let parseArticle = (html: string): ParsedSite => {
     const $ = cheerio.load(html, { xmlMode: false });
     let site = new ParsedSite();
-    site.title = $('title').text();
+    site.title = $('meta[property*="title"]').attr("content");
     site.description = $('meta[property*="description"]').attr("content");
     let swatch = $('img[src*="swatch"]').attr("src");
     if (swatch) {
