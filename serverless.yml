@@ -1,0 +1,51 @@
+service: coin-news
+
+stage: prod
+region: us-east-1
+
+environment:
+  WEBHOOK_URL: ${env:WEBHOOK_URL}}
+    
+provider:
+  name: aws
+  runtime: nodejs8.10
+  usagePlan:
+      quota:
+        limit: 5000
+        offset: 2
+        period: MONTH
+      throttle: 
+        burstLimit: 200
+        rateLimit: 100
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-dynamic-dotenv
+
+package:
+  include:
+    handler.ts
+
+functions:
+  coin-news:
+    handler: handler.news
+    timeout: 30
+
+    events:
+      - http:
+          path: coin-news
+          method: get
+  
+  coin-news-alert:
+    handler: handler.newsAlert
+    timeout: 30
+
+    events:
+      - schedule:
+          name: coin-news-alert-event
+          description: 'Check for new news and send a webhook'
+          rate: rate(15 minutes)
+          enabled: true
+          input:
+            stageParams:
+              stage: prod

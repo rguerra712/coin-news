@@ -1,3 +1,6 @@
+# Serverless directories
+.serverless
+
 # Logs
 logs
 *.log
@@ -29,14 +32,14 @@ bower_components
 # node-waf configuration
 .lock-wscript
 
-# Compiled binary addons (https://nodejs.org/api/addons.html)
+# Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 
 # Dependency directories
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
+# Typescript v1 declaration files
 typings/
 
 # Optional npm cache directory
@@ -56,6 +59,18 @@ typings/
 
 # dotenv environment variables file
 .env
+dev.env
+.env.*
 
-# next.js build output
-.next
+# Exclude tsc generated files
+js/*.map
+js/ts.js
+lib/*.map
+lib/ts.js
+/**/*.js
+/out
+
+# Node filespackage-lock.json
+
+# build files
+.build/
