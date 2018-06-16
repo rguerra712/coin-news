@@ -11,8 +11,12 @@ export const news: Handler = (
     context: Context,
     cb: Callback
 ) => {
-    let take = event.queryStringParameters ? Number(event.queryStringParameters['take']) : 3;
-    let after = event.queryStringParameters ? new Date(Date.parse(event.queryStringParameters['after'])) : undefined;
+    let take = event.queryStringParameters
+        ? Number(event.queryStringParameters["take"])
+        : 3;
+    let after = event.queryStringParameters
+        ? new Date(Date.parse(event.queryStringParameters["after"]))
+        : undefined;
     getSites(take, after)
         .then(sites => {
             const response = {
@@ -25,29 +29,23 @@ export const news: Handler = (
 };
 
 export const newsAlert: Handler = () => {
-    let sites = getSites(1)
+    getSites(1)
         .then(sites => {
-            alertIfAnySitesAreNew(sites);
+            if (isNewsNew(sites)) {
+                new WebhookNotifier().trigger();
+            }
         })
         .catch(onerror);
 };
 
-function getSites(take: number, after?: Date): Promise<ParsedSite[]> {
+async function getSites(take: number, after?: Date): Promise<ParsedSite[]> {
     let parserProvider = new ParserProvider();
     let parsers = parserProvider.getAllParsers();
     let parserPromises = parsers.map(parser => parser.getSites(take, after));
-    let promiseAll = Promise.all(parserPromises)
-        .then(sites => flatten(sites))
-        .catch(onerror);
-    return Promise.resolve(promiseAll);
+    let sites = await Promise.all(parserPromises);
+    return flatten(sites);
 }
 
 function flatten(arrays: ParsedSite[][]) {
     return [].concat.apply([], arrays);
-}
-
-function alertIfAnySitesAreNew(sites: ParsedSite[]): void {
-    if (isNewsNew(sites)) {
-        new WebhookNotifier().trigger();
-    }
 }

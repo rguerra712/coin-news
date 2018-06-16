@@ -44,7 +44,7 @@ functions:
       - schedule:
           name: coin-news-alert-event
           description: 'Check for new news and send a webhook'
-          rate: rate(15 minutes)
+          rate: rate(60 minutes)
           enabled: true
           input:
             stageParams:
