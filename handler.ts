@@ -3,6 +3,7 @@ import { APIGatewayEvent, Callback, Context, Handler } from "aws-lambda";
 import { ParserProvider } from "./lib/parsers/parser-provider";
 import isNewsNew from "./lib/new-news-determiner";
 import WebhookNotifier from "./lib/webhook-notifier";
+import sitesToHtml from "./lib/sites-to-html";
 
 let onerror = (error: any) => console.error(error);
 
@@ -21,7 +22,10 @@ export const news: Handler = (
         .then(sites => {
             const response = {
                 statusCode: 200,
-                body: JSON.stringify(sites, null, 2)
+                headers: {
+                    'Content-Type': 'text/html',
+                  },
+                body: sitesToHtml(sites)
             };
             cb(null, response);
         })
