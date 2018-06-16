@@ -7,14 +7,18 @@ export default function sitesToHtml(sites: ParsedSite[]) {
     <!DOCTYPE html>
     <html>
         <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
             <title>
             Coin News
             </title>
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         </head>
         <body>
 ${siteHtmls}       
         </body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </html>
 `;
 }
@@ -26,12 +30,12 @@ function getSiteHtml(site: ParsedSite): string {
     <a href="${videoUrl}">Link to above video</a>`)
         .join('<br />');
     return `
-            <div class="sites">
+            <div class="container">
                 <h3><a href="${site.url}">${site.title}</a></h3>
                 <p>${site.date}</p>
                 <h4>Details:</h4>
                 <p>${site.description}</p>
-                <div class="videos">
+                <div class="container-fluid">
                     ${videoHtml}
                 </div>
             </div>
