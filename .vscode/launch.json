@@ -8,12 +8,11 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/out/handler.js",
-            "preLaunchTask": "npm: build",
+            "program": "${workspaceFolder}/handler.js",
+            "preLaunchTask": "tsc: build - tsconfig.json",
             "outFiles": [
-				"${workspaceRoot}/out/**/*.js"
-            ],
-            "envFile": "${workspaceFolder}/.env.dev"
+                "${workspaceFolder}/out/**/*.js"
+            ]
         },
         {
             "type": "node",
@@ -21,18 +20,16 @@
             "name": "Mocha Tests",
             "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
             "args": [
-                "-u",
-                "tdd",
-                "--timeout",
-                "999999",
-                "--colors",
-                "${workspaceFolder}/out/test"
+              "-u",
+              "tdd",
+              "--timeout",
+              "999999",
+              "--colors",
+              "${workspaceFolder}/out/test"
             ],
             "internalConsoleOptions": "openOnSessionStart",
             "preLaunchTask": "npm: build",
-            "outFiles": [
-				"${workspaceRoot}/out/**/*.js"
-			]
-        }
+            "outFiles": ["${workspaceRoot}/out/**/*.js"]
+          }
     ]
 }

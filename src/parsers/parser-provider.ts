@@ -4,6 +4,9 @@ import TradingViewParser from "./trading-view/trading-view-parser";
 
 export class ParserProvider {
     getAllParsers(): SiteParser[] {
-        return [new TradingViewParser(), new BitcoinLiveParser()];
+        return [
+            // new TradingViewParser(),
+            new BitcoinLiveParser(),
+        ];
     }
 }

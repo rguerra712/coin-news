@@ -5,10 +5,17 @@ region: us-east-1
 
 environment:
   WEBHOOK_URL: ${env:WEBHOOK_URL}}
+  SOURCE_AS_A_SERVICE_NAME: ${env:SOURCE_AS_A_SERVICE_NAME}}
+  SOURCE_AS_A_SERVICE_REGION: ${env:SOURCE_AS_A_SERVICE_REGION}}  
     
 provider:
   name: aws
   runtime: nodejs8.10
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action: 
+       - lambda:InvokeFunction
+      Resource: ${env:SOURCE_AS_A_SERVICE_ARN}
   usagePlan:
       quota:
         limit: 5000

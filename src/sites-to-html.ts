@@ -1,8 +1,9 @@
 import { ParsedSite } from "./../types/types";
 
 export default function sitesToHtml(sites: ParsedSite[]) {
-    let siteHtmls = sites.map(site => getSiteHtml(site))
-        .join('<br /><br /><br />');
+    let siteHtmls = sites
+        .map(site => getSiteHtml(site))
+        .join("<br /><br /><br />");
     return `
     <!DOCTYPE html>
     <html>
@@ -24,11 +25,17 @@ ${siteHtmls}
 }
 
 function getSiteHtml(site: ParsedSite): string {
-    let videoHtml = site.videoUrls.map(videoUrl => `
+    let videoHtml = '';
+    if (site.videoUrls) {
+        videoHtml = site.videoUrls
+            .map(
+                videoUrl => `
     <iframe src="${videoUrl}" width="700" height="400"></iframe>
     <br />
-    <a href="${videoUrl}">Link to above video</a>`)
-        .join('<br />');
+    <a href="${videoUrl}">Link to above video</a>`
+            )
+            .join("<br />");
+    }
     return `
             <div class="container">
                 <h3><a href="${site.url}">${site.title}</a></h3>

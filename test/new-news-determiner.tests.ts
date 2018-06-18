@@ -1,6 +1,6 @@
 import { ParsedSite } from './../types/types';
 import {expect} from 'chai';
-import isNewNews from "./../lib/new-news-determiner";
+import isNewNews from "./../src/new-news-determiner";
 
 const minutesThatConstituteNew = 15;
 const fiveMinutesAgo = Date.now() - 1000 * 60 * 5;
