@@ -12,7 +12,7 @@ export default class TradingViewParser implements SiteParser {
     private url: string = "https://www.tradingview.com/chat/%23bitcoin";
 
     getLatestSites(): Promise<ParsedSite[]> {
-        return this.getSites(1);
+        return this.getSites(2, new Date(Date.now() - 3 * 1000 * 60));
     }
 
     async getSites(take?: number, after?: Date): Promise<ParsedSite[]> {
@@ -47,6 +47,7 @@ export default class TradingViewParser implements SiteParser {
         let $ = cheerio.load(html);
         let site = new ParsedSite();
         site.title = $("title").text();
+        site.description = htmlToText.fromString(html);
         site.url = url;
         site.shouldUseUrlForLink = false;
         try {

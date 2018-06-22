@@ -10,9 +10,11 @@
   "dependencies": {
     "@types/aws-lambda": "0.0.22",
     "@types/cheerio": "^0.22.7",
+    "@types/html-to-text": "^1.4.31",
     "aws-lambda": "^0.1.2",
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.2",
+    "html-to-text": "^4.0.0",
     "serverless-plugin-typescript": "^1.1.5",
     "source-map-support": "^0.5.0"
   },
