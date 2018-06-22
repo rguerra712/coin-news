@@ -42,19 +42,27 @@ export const news: Handler = (
         });
 };
 
-export const newsAlert: Handler = () => {
-    getSites(1)
+export const infrequentNewsAlert: Handler = () => {
+    getSites(1, undefined, false)
         .then(sites => {
             if (isNewsNew(sites)) {
-                new WebhookNotifier().trigger();
+                new WebhookNotifier().trigger(sites);
             }
         })
         .catch(onerror);
 };
 
-async function getSites(take: number, after?: Date): Promise<ParsedSite[]> {
+export const frequentNewsAlert: Handler = () => {
+    getSites(1, undefined, true)
+        .then(sites => {
+            new WebhookNotifier().trigger(sites);
+        })
+        .catch(onerror);
+};
+
+async function getSites(take: number, after?: Date, isFrequent?: boolean): Promise<ParsedSite[]> {
     let parserProvider = new ParserProvider();
-    let parsers = parserProvider.getAllParsers();
+    let parsers = parserProvider.getAllParsers(isFrequent);
     let parserPromises = parsers.map(parser => parser.getSites(take, after));
     let sites = await Promise.all(parserPromises);
     return flatten(sites);

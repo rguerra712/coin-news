@@ -1,6 +1,7 @@
 export interface SiteParser {
     getSites(take?: number, after?: Date): Promise<ParsedSite[]>;
     getLatestSites(): Promise<ParsedSite[]>;
+    isFrequent(): boolean;
 }
 
 export class ParsedSite {
@@ -9,4 +10,5 @@ export class ParsedSite {
     url: string;
     videoUrls: string[];
     date?: Date;
+    shouldUseUrlForLink: boolean;
 }

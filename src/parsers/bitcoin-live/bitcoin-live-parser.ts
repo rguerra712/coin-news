@@ -3,6 +3,9 @@ import request from "axios";
 import * as cheerio from "cheerio";
 
 export default class BitcoinLiveParser implements SiteParser {
+    isFrequent(): boolean {
+        return false;
+    }
     getLatestSites(): Promise<ParsedSite[]> {
         return this.getSites(1);
     }
@@ -50,8 +53,9 @@ let parseArticle = (html: string): ParsedSite => {
     }
     let dateString = $(".published_at").text();
     if (dateString) {
-        dateString += " CST";
+        dateString += " CDT";
         site.date = new Date(Date.parse(dateString));
     }
+    site.shouldUseUrlForLink = false;
     return site;
 };

@@ -1,10 +1,15 @@
-import { ParsedSite } from './../../../types/types';
+import { HtmlAfterLoad } from "./../../html-after-load";
 import { SiteParser, ParsedSite } from "../../../types/types";
 import request from "axios";
 import TradingViewHtmlLinkParser from "./trading-view-html-link-parser";
+import * as cheerio from "cheerio";
+import getCacheDateFor from "../../cache-date-determiner";
 
 export default class TradingViewParser implements SiteParser {
-    private url: string = "https://www.tradingview.com/chat/#bitcoin";
+    isFrequent(): boolean {
+        return true;
+    }
+    private url: string = "https://www.tradingview.com/chat/%23bitcoin";
 
     getLatestSites(): Promise<ParsedSite[]> {
         return this.getSites(1);
@@ -16,7 +21,18 @@ export default class TradingViewParser implements SiteParser {
             throw new Error(`unable to load html for site at ${this.url}`);
         }
         let linkParser = new TradingViewHtmlLinkParser(html);
+        let chats = linkParser.getChats();
+        if (chats.length === 0) {
+            let htmlAfterLoad = new HtmlAfterLoad();
+            html = await htmlAfterLoad.getHtml(this.url);
+            linkParser = new TradingViewHtmlLinkParser(html);
+        }
         let links = linkParser.getLinksFromChats();
+        if (links.length > 0) {
+            links.forEach(link =>
+                console.log(`link found for trading view at: ${link}`)
+            );
+        }
         let sitePromises = links.map(link => this.getParsedSiteFrom(link));
         return Promise.all(sitePromises);
     }
@@ -30,8 +46,14 @@ export default class TradingViewParser implements SiteParser {
         let html = await this.getHtml(url);
         let $ = cheerio.load(html);
         let site = new ParsedSite();
-        site.title = $('title').text();
+        site.title = $("title").text();
         site.url = url;
+        site.shouldUseUrlForLink = false;
+        try {
+            site.date = await getCacheDateFor(url);
+        } catch (error) {
+            console.error(`error logging date for ${url} with error ${error}`);
+        }
         return site;
     }
 }

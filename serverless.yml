@@ -1,16 +1,12 @@
 service: coin-news
 
 stage: prod
-region: us-east-1
-
-environment:
-  WEBHOOK_URL: ${env:WEBHOOK_URL}}
-  SOURCE_AS_A_SERVICE_NAME: ${env:SOURCE_AS_A_SERVICE_NAME}}
-  SOURCE_AS_A_SERVICE_REGION: ${env:SOURCE_AS_A_SERVICE_REGION}}  
+region: us-east-1  
     
 provider:
   name: aws
   runtime: nodejs8.10
+  stage: prod
   iamRoleStatements:
     - Effect: "Allow"
       Action: 
@@ -44,7 +40,7 @@ functions:
           method: get
   
   coin-news-alert:
-    handler: handler.newsAlert
+    handler: handler.infrequentNewsAlert
     timeout: 30
 
     events:
@@ -53,6 +49,14 @@ functions:
           description: 'Check for new news and send a webhook'
           rate: rate(60 minutes)
           enabled: true
-          input:
-            stageParams:
-              stage: prod
+
+  coin-news-frequent-alert:
+    handler: handler.frequentNewsAlert
+    timeout: 30
+
+    events:
+      - schedule:
+          name: coin-news-frequent-alert-event
+          description: 'Check for new news and send a webhook when it occurs frequently'
+          rate: rate(3 minutes)
+          enabled: true
