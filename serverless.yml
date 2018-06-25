@@ -23,15 +23,12 @@ provider:
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-offline-scheduler
   - serverless-dynamic-dotenv
-
-package:
-  include:
-    handler.ts
-
+  
 functions:
   coin-news:
-    handler: handler.news
+    handler: src/handler.news
     timeout: 30
 
     events:
@@ -40,7 +37,7 @@ functions:
           method: get
   
   coin-news-alert:
-    handler: handler.infrequentNewsAlert
+    handler: src/handler.infrequentNewsAlert
     timeout: 30
 
     events:
@@ -51,7 +48,7 @@ functions:
           enabled: true
 
   coin-news-frequent-alert:
-    handler: handler.frequentNewsAlert
+    handler: src/handler.frequentNewsAlert
     timeout: 30
 
     events:

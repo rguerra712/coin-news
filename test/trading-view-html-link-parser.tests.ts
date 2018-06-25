@@ -1,4 +1,4 @@
-import TradingViewHtmlLinkParser from "../src/parsers/trading-view/trading-view-html-link-parser";
+import { TradingViewHtmlLinkParser } from "../src/parsers/trading-view/trading-view-html-link-parser";
 import * as fs from "fs";
 import * as path from "path";
 import { expect } from "chai";
@@ -10,20 +10,20 @@ const html = fs.readFileSync(
 
 describe("html", () => {
     it("should load file properly", () => {
-        expect(html).to.not.be.undefined;
+        expect(html).to.not.equal(undefined);
     });
 });
 
 describe("getChats() with example html", () => {
     it("should have 822 chat items", () => {
         // Arrange
-        let parser = new TradingViewHtmlLinkParser(html);
+        const parser = new TradingViewHtmlLinkParser(html);
 
         // Act
-        let chats = parser.getChats();
+        const chats = parser.getChats();
 
         // Assert
-        expect(chats).to.not.be.undefined;
+        expect(chats).to.not.equal(undefined);
         expect(chats.length).to.equal(
             822,
             "should have expected number of chats"
@@ -32,11 +32,11 @@ describe("getChats() with example html", () => {
 
     it("should have at least one chat item chat item with a bloomberg link", () => {
         // Arrange
-        let parser = new TradingViewHtmlLinkParser(html);
+        const parser = new TradingViewHtmlLinkParser(html);
 
         // Act
-        let chats = parser.getChats();
-        let bloombergChats = chats.filter(chat =>
+        const chats = parser.getChats();
+        const bloombergChats = chats.filter(chat =>
             chat.toLocaleLowerCase().includes("https://www.bloomberg.com")
         );
 
@@ -51,11 +51,11 @@ describe("getChats() with example html", () => {
 describe("getLinksFromChats() with example html", () => {
     it("should have only one chat item chat item with a bloomberg link to avoid referenes", () => {
         // Arrange
-        let parser = new TradingViewHtmlLinkParser(html);
+        const parser = new TradingViewHtmlLinkParser(html);
 
         // Act
-        let links = parser.getLinksFromChats();
-        let bloombergLinks = links.filter(link =>
+        const links = parser.getLinksFromChats();
+        const bloombergLinks = links.filter(link =>
             link.includes("https://www.bloomberg.com")
         );
 
@@ -68,10 +68,10 @@ describe("getLinksFromChats() with example html", () => {
 
     it("should only bloomberg link as other chats were not useful, e.g. youtube, twitter, etc", () => {
         // Arrange
-        let parser = new TradingViewHtmlLinkParser(html);
+        const parser = new TradingViewHtmlLinkParser(html);
 
         // Act
-        let links = parser.getLinksFromChats();
+        const links = parser.getLinksFromChats();
 
         // Assert
         expect(links.length).to.equal(

@@ -1,21 +1,21 @@
 import { ParsedSite } from "./types/types";
 import { APIGatewayEvent, Callback, Context, Handler } from "aws-lambda";
-import { ParserProvider } from "./src/parsers/parser-provider";
-import isNewsNew from "./src/new-news-determiner";
-import WebhookNotifier from "./src/webhook-notifier";
-import sitesToHtml from "./src/sites-to-html";
+import { ParserProvider } from "./parsers/parser-provider";
+import {isNewsNew} from "./new-news-determiner";
+import {WebhookNotifier} from "./webhook-notifier";
+import {sitesToHtml} from "./sites-to-html";
 
-let onerror = (error: any) => console.error(error);
+const onerror = (error: Error) => console.error(error);
 
-export const news: Handler = (
+export const news = (
     event: APIGatewayEvent,
     context: Context,
     cb: Callback
 ) => {
-    let take = event.queryStringParameters
+    const take = event.queryStringParameters
         ? Number(event.queryStringParameters["take"])
         : 3;
-    let after = event.queryStringParameters
+        const after = event.queryStringParameters
         ? new Date(Date.parse(event.queryStringParameters["after"]))
         : undefined;
     getSites(take, after)
@@ -61,10 +61,10 @@ export const frequentNewsAlert: Handler = () => {
 };
 
 async function getSites(take: number, after?: Date, isFrequent?: boolean): Promise<ParsedSite[]> {
-    let parserProvider = new ParserProvider();
-    let parsers = parserProvider.getAllParsers(isFrequent);
-    let parserPromises = parsers.map(parser => parser.getSites(take, after));
-    let sites = await Promise.all(parserPromises);
+    const parserProvider = new ParserProvider();
+    const parsers = parserProvider.getAllParsers(isFrequent);
+    const parserPromises = parsers.map(parser => parser.getSites(take, after));
+    const sites = await Promise.all(parserPromises);
     return flatten(sites);
 }
 

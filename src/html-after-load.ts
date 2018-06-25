@@ -13,7 +13,8 @@ export class HtmlAfterLoad {
             return this.getHtmlFromGateway(url);
         }
         return new Promise((resolve, reject) => {
-            let callback = (error: AWSError, data: any) => {
+            // tslint:disable-next-line:no-any
+            const callback = (error: AWSError, data: any) => {
                 if (error) {
                     reject(error);
                     return;
@@ -30,12 +31,12 @@ export class HtmlAfterLoad {
                     );
                 }
             };
-            let event = {
+            const event = {
                 queryStringParameters: {
-                    url: url
+                    url
                 }
             };
-            let request = {
+            const request = {
                 FunctionName:
                     process.env["SOURCE_AS_A_SERVICE_NAME"] ||
                     "NAME_ENV_VARIABLE_MISSING",
@@ -46,8 +47,8 @@ export class HtmlAfterLoad {
     }
 
     async getHtmlFromGateway(url: string): Promise<string> {
-        let lambdaUrl = `${process.env["SOURCE_AS_A_SERVICE_URL"]}/?url=${url}`;
-        let response = await request(lambdaUrl);
+        const lambdaUrl = `${process.env["SOURCE_AS_A_SERVICE_URL"]}/?url=${url}`;
+        const response = await request(lambdaUrl);
         return response.data;
     }
 }

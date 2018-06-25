@@ -1,7 +1,7 @@
-import { ParsedSite } from "./../types/types";
+import { ParsedSite } from "./types/types";
 
-export default function sitesToHtml(sites: ParsedSite[]) {
-    let siteHtmls = sites
+export function sitesToHtml(sites: ParsedSite[]) {
+    const siteHtmls = sites
         .map(site => getSiteHtml(site))
         .join("<br /><br /><br />");
     return `

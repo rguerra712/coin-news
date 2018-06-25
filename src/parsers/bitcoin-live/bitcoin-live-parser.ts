@@ -1,24 +1,24 @@
-import { SiteParser, ParsedSite } from "../../../types/types";
+import { SiteParser, ParsedSite } from "../../types/types";
 import request from "axios";
 import * as cheerio from "cheerio";
 
-export default class BitcoinLiveParser implements SiteParser {
+export class BitcoinLiveParser implements SiteParser {
     isFrequent(): boolean {
         return false;
     }
     getLatestSites(): Promise<ParsedSite[]> {
         return this.getSites(1);
     }
-    private url: string = "https://bitcoin.live/blogs?author=8";
+    private url = "https://bitcoin.live/blogs?author=8";
 
     async getSites(take?: number, after?: Date): Promise<ParsedSite[]> {
-        let response = await request(this.url);
-        let articles = findArticles(response.data);
+        const response = await request(this.url);
+        const articles = findArticles(response.data);
         let promises = articles.map(getSitesFromArticle);
         if (take) {
             promises = promises.slice(0, take);
         }
-        let sitesPromises = Promise.all(promises);
+        const sitesPromises = Promise.all(promises);
         let sites = await sitesPromises;
         if (after) {
             sites = sites.filter(site => site.date && site.date > after);
@@ -27,28 +27,28 @@ export default class BitcoinLiveParser implements SiteParser {
     }
 }
 
-let findArticles = (html: string): string[] => {
+const findArticles = (html: string): string[] => {
     const $ = cheerio.load(html);
-    let links = $(".link-block a[href]");
-    let urls = links.map((index, element) => element.attribs.href).get();
+    const links = $(".link-block a[href]");
+    const urls = links.map((index, element) => element.attribs.href).get();
     return urls;
 };
 
-let getSitesFromArticle = async (url: string): Promise<ParsedSite> => {
-    let response = await request(url);
-    let site = parseArticle(response.data);
+const getSitesFromArticle = async (url: string): Promise<ParsedSite> => {
+    const response = await request(url);
+    const site = parseArticle(response.data);
     site.url = url;
     return site;
 };
 
-let parseArticle = (html: string): ParsedSite => {
+const parseArticle = (html: string): ParsedSite => {
     const $ = cheerio.load(html, { xmlMode: false });
-    let site = new ParsedSite();
+    const site = new ParsedSite();
     site.title = $('meta[property*="title"]').attr("content");
     site.description = $('meta[property*="description"]').attr("content");
-    let swatch = $('img[src*="swatch"]').attr("src");
+    const swatch = $('img[src*="swatch"]').attr("src");
     if (swatch) {
-        let videoUrl = swatch.replace("swatch", "");
+        const videoUrl = swatch.replace("swatch", "");
         site.videoUrls = [videoUrl];
     }
     let dateString = $(".published_at").text();

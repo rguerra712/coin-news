@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 
-export default class TradingViewHtmlLinkParser {
+export class TradingViewHtmlLinkParser {
     private $: CheerioStatic;
 
     /**
@@ -13,10 +13,10 @@ export default class TradingViewHtmlLinkParser {
     getChats(): string[] {
         const $ = this.$;
         const chats = $("div .ch-item-text");
-        let strings: string[] = [];
-        $(chats).each(function(i, chat) {
-            let chatElement = $(chat);
-            let html = chatElement.html()
+        const strings: string[] = [];
+        $(chats).each((i, chat) => {
+            const chatElement = $(chat);
+            const html = chatElement.html()
                 ? chatElement.html()
                 : chatElement.text();
             strings.push(html || "");
@@ -26,8 +26,8 @@ export default class TradingViewHtmlLinkParser {
 
     getLinksFromChats(): string[] {
         const $ = this.$;
-        let chats = this.getChats();
-        let linkUrls = chats.map(chat => cheerio.load(chat))
+        const chats = this.getChats();
+        const linkUrls = chats.map(chat => cheerio.load(chat))
             .map($ => $('a[href]'))
             .filter(element => element)
             .map(element => element.attr('href'))
@@ -39,8 +39,8 @@ export default class TradingViewHtmlLinkParser {
         if (!link) return false;
         link = link.toLocaleLowerCase();
         let forbiddenWords = ['aws', 'tradingview', 'youtube', 'twitter', 'facebook'];
-        let coins = ['usd', 'btc', 'bch', 'eth', 'ltc', 'etc', 'eos'];
-        let forbiddenCoinWords = coins.map(coin => `/${coin}`);
+        const coins = ['usd', 'btc', 'bch', 'eth', 'ltc', 'etc', 'eos'];
+        const forbiddenCoinWords = coins.map(coin => `/${coin}`);
         forbiddenWords = forbiddenWords.concat(forbiddenCoinWords);
         return !link.startsWith('/')
             && !forbiddenWords.some(forbidden => link.includes(forbidden));
